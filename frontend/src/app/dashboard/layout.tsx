@@ -1,0 +1,41 @@
+import { AppSidebar } from "@/components/dashboard/sidebar/app-sidebar";
+import BreadcrumbPageClient from "@/components/dashboard/sidebar/breadcrumb-page-client";
+import { ModeToggle } from "@/components/theme/ModeToggle";
+import { Separator } from "@/components/ui/separator";
+import { requireAuth } from "@/lib/auth-utils";
+
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+
+export default async function DashboardLaout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  await requireAuth();
+
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset className="flex h-screen flex-col">
+        <header className="bg-sidebar sticky-top z-10 flex items-center justify-between border-b px-4 py-2">
+          <div className="flex shrink-0 grow items-center gap-2">
+            <SidebarTrigger className="-ml-1" />
+            <Separator
+              orientation="vertical"
+              className="mr-2 data-[orientation=vertical]:h-4"
+            />
+            <BreadcrumbPageClient />
+          </div>
+          <ModeToggle />
+        </header>
+        <main className="flex-1 overflow-y-auto p-6 md:p-8 lg:p-10">
+          {children}
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
+  );
+}
